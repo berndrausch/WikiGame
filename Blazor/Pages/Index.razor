@@ -1,0 +1,49 @@
+@page "/"
+@using WikiGame.Logic;
+
+<style>
+.input{
+    width: 70%;
+}
+</style>
+
+<p>Start: <input class="input" @bind="start" /> </p>
+<p>Goal: <input class="input" @bind="goal" /> </p>
+<p>Preferred: <input class="input" @bind="preferred" /> </p>
+
+<p><button class="btn btn-primary" @onclick="FindWay">Start</button></p>
+<p>
+@if (way != null)
+{
+    <table class='table'>
+        <tbody>
+            @foreach (var link in way)
+            {
+                <tr>
+                    <td>@link</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+</p>
+
+@code {
+
+    private string start = @"https://de.wikipedia.org/wiki/Spezial:Zuf%C3%A4llige_Seite";
+    private string goal = "Angela_Merkel";
+    string preferred = "CDU, Bundeskanzler_(Deutschland), Deutschland, NATO, Große_Koalition";
+
+    private List<string> way;
+
+    private void FindWay()
+    {
+        Game game = new Game(start, goal, SplitPrefferedLinks());
+        way = game.FindWay(10).ToList();
+    }
+
+    private IEnumerable<string> SplitPrefferedLinks()
+    {
+        return preferred.Split('.').Select(str => str.Trim());
+    }
+}
