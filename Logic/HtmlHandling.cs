@@ -44,6 +44,11 @@ namespace WikiGame.Logic
                 return false;
             }
 
+             if (url.Contains(@"action=edit"))
+            {
+                return false;
+            }
+
             return url.StartsWith(@"/");
         }
 
